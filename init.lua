@@ -51,6 +51,7 @@ require("lazy").setup("plugins")
 local servers = {
   rust_analyzer = {},
   ruby_lsp = {},
+  solargraph = {},
   tsserver = {},
   yamlls = {},
   eslint = {},
@@ -63,6 +64,8 @@ local servers = {
   },
 }
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 local mason_lspconfig = require("mason-lspconfig")
 
 mason_lspconfig.setup {
@@ -72,7 +75,7 @@ mason_lspconfig.setup {
 mason_lspconfig.setup_handlers {
   function(server_name)
     require("lspconfig")[server_name].setup {
-      -- capabilities = capabilities,
+      capabilities = capabilities,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
     }
@@ -96,11 +99,11 @@ require("nvim-treesitter.configs").setup {
     disable = { "vimdoc" },
     enable = true,
   },
-  hidesig = {
-    enable = true,
-    opacity = 0.5,
-    delay = 200,
-  },
+  --hidesig = {
+  --  enable = true,
+  --  opacity = 0.5,
+  --  delay = 200,
+  --},
   textobjects = {
     select = {
       enable = true,
@@ -115,16 +118,77 @@ require("nvim-treesitter.configs").setup {
   },
 }
 
+-- Autocomplete
+
+-- nvim-cmp setup
+local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+
+luasnip.config.setup {}
+
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert {
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  },
+    window = {
+    completion = {
+      border = 'rounded',
+      winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
+      side_padding = 1,
+      max_width = 80,
+      max_height = 10,
+    },
+    documentation = {
+      border = 'rounded',
+      winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
+    },
+  }
+}
+
+
 -- Keymaps
 
 -- Go to previous or next diagnostic
 vim.keymap.set("n", "<C-k>", function() vim.diagnostic.goto_prev({ float = true }) end, { desc = "Diagnostics: prev" })
 vim.keymap.set("n", "<C-j>", function() vim.diagnostic.goto_next({ float = true }) end, { desc = "Diagnostics: next" })
-
 -- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
 vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
+--- Toggle Tree
+vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- Colorschemes
 
