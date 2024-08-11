@@ -189,6 +189,7 @@ cmp.setup {
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.cmd("copen")
+    vim.cmd("resize 8")
     vim.cmd("wincmd p")
   end
 })
