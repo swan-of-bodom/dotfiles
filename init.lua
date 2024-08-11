@@ -1,23 +1,23 @@
 -- Vim Options
 
-vim.opt.ts = 2                   -- Number of spaces in <Tab>
-vim.opt.shiftwidth = 2           -- Number of spaces to use for each step of (auto)indent
-vim.opt.softtabstop = 2          -- Number of spaces a <Tab> counts for
-vim.opt.number = true            -- Show line numbers
-vim.opt.relativenumber = true    -- Show current line but use relative numbers
-vim.opt.expandtab = true         -- Use spaces instead of tabs
-vim.opt.termguicolors = true     -- Enable true colors for supported terminals
-vim.opt.cursorline = true        -- Highlight the screen line of the cursor
-vim.opt.hlsearch = true          -- Highlight all search matches
-vim.opt.incsearch = true         -- Do incremental searching
-vim.opt.smartindent = true       -- Automatically insert indentation in some cases
-vim.opt.ttyfast = true           -- Use fast terminal scrolling
-vim.opt.wildmode = "list:full"   -- Completion mode: list all matches
-vim.opt.updatetime=200           -- reduce updatetime
-vim.opt.cmdheight=1              -- Command line height
-vim.opt.autoindent = true        -- Indent: Copy indent from current line when starting new line
-vim.opt.swapfile = false         -- No swap file
-vim.o.signcolumn = "yes"         -- Stop the signal column from resizing
+vim.opt.ts = 2                 -- Number of spaces in <Tab>
+vim.opt.shiftwidth = 2         -- Number of spaces to use for each step of (auto)indent
+vim.opt.softtabstop = 2        -- Number of spaces a <Tab> counts for
+vim.opt.number = true          -- Show line numbers
+vim.opt.relativenumber = true  -- Show current line but use relative numbers
+vim.opt.expandtab = true       -- Use spaces instead of tabs
+vim.opt.termguicolors = true   -- Enable true colors for supported terminals
+vim.opt.cursorline = true      -- Highlight the screen line of the cursor
+vim.opt.hlsearch = true        -- Highlight all search matches
+vim.opt.incsearch = true       -- Do incremental searching
+vim.opt.smartindent = true     -- Automatically insert indentation in some cases
+vim.opt.ttyfast = true         -- Use fast terminal scrolling
+vim.opt.wildmode = "list:full" -- Completion mode: list all matches
+vim.opt.updatetime = 200       -- reduce updatetime
+vim.opt.cmdheight = 1          -- Command line height
+vim.opt.autoindent = true      -- Indent: Copy indent from current line when starting new line
+vim.opt.swapfile = false       -- No swap file
+vim.o.signcolumn = "yes"       -- Stop the signal column from resizing
 
 -- For nvim-tree
 vim.g.loaded_netrw = 1
@@ -35,7 +35,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -50,6 +50,7 @@ require("lazy").setup("plugins")
 
 local servers = {
   rust_analyzer = {},
+  cairo_ls = {},
   ruby_lsp = {},
   solargraph = {},
   tsserver = {},
@@ -82,6 +83,9 @@ mason_lspconfig.setup_handlers {
   end
 }
 
+ -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
+vim.lsp.set_log_level("debug")
+
 -- Diagnostics
 vim.diagnostic.config({
   virtual_text = true,
@@ -89,6 +93,7 @@ vim.diagnostic.config({
   underline = true,
   --update_in_insert = true,
 })
+
 
 -- Treesitter
 
@@ -163,7 +168,7 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
   },
-    window = {
+  window = {
     completion = {
       border = 'rounded',
       winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
@@ -178,15 +183,33 @@ cmp.setup {
   }
 }
 
+-- Autocommands 
+
+-- Open qfix on vim enter
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.cmd("copen")
+    vim.cmd("wincmd p")
+  end
+})
+
+-- Populate quickfix on change
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
+  callback = function()
+    vim.diagnostic.setqflist({ open = false})
+  end
+})
 
 -- Keymaps
 
 -- Go to previous or next diagnostic
-vim.keymap.set("n", "<C-k>", function() vim.diagnostic.goto_prev({ float = true }) end, { desc = "Diagnostics: prev" })
-vim.keymap.set("n", "<C-j>", function() vim.diagnostic.goto_next({ float = true }) end, { desc = "Diagnostics: next" })
+vim.keymap.set("n", "<C-k>", function() vim.diagnostic.goto_prev({ float = false }) end, { desc = "Diagnostics: prev" })
+vim.keymap.set("n", "<C-j>", function() vim.diagnostic.goto_next({ float = false }) end, { desc = "Diagnostics: next" })
+
 -- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
 vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+
 --- Toggle Tree
 vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
@@ -195,4 +218,3 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = tru
 -- vim.cmd.colorscheme "tokyonight-rain"
 vim.cmd.colorscheme "catppuccin"
 -- vim.cmd.colorscheme "onedark"
-
