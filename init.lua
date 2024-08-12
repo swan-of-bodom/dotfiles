@@ -49,13 +49,6 @@ require("lazy").setup("plugins")
 -- LSP
 
 local servers = {
-  rust_analyzer = {},
-  cairo_ls = {},
-  ruby_lsp = {},
-  solargraph = {},
-  tsserver = {},
-  yamlls = {},
-  eslint = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -207,6 +200,9 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 vim.keymap.set("n", "<C-k>", function() vim.diagnostic.goto_prev({ float = false }) end, { desc = "Diagnostics: prev" })
 vim.keymap.set("n", "<C-j>", function() vim.diagnostic.goto_next({ float = false }) end, { desc = "Diagnostics: next" })
 
+-- Clipboard
+vim.keymap.set("v", "<leader>yy", '"+y', { desc = "Copy to clipboard" })
+
 -- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
 vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
@@ -214,8 +210,11 @@ vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, sile
 --- Toggle Tree
 vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
+
 -- Colorschemes
 
--- vim.cmd.colorscheme "tokyonight-rain"
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "tokyonight-moon"
+-- vim.cmd.colorscheme "catppuccin-mocha"
+-- vim.cmd.colorscheme "catppuccin-frappe"
+-- vim.cmd.colorscheme "catppuccin-frappe"
 -- vim.cmd.colorscheme "onedark"
