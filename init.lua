@@ -26,6 +26,9 @@ vim.g.mapleader = ","
 vim.g.maplocalleader = "\\"
 
 
+-- TODO: Fix the registry thing from whichkey
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Copy to clipboard" })
+
 -- Plugin Manager: lazy.nvim
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -200,9 +203,6 @@ vim.api.nvim_create_autocmd("DiagnosticChanged", {
 vim.keymap.set("n", "<C-k>", function() vim.diagnostic.goto_prev({ float = false }) end, { desc = "Diagnostics: prev" })
 vim.keymap.set("n", "<C-j>", function() vim.diagnostic.goto_next({ float = false }) end, { desc = "Diagnostics: next" })
 
--- Clipboard
-vim.keymap.set("v", "<leader>yy", '"+y', { desc = "Copy to clipboard" })
-
 -- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
 vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
@@ -213,8 +213,14 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = tru
 
 -- Colorschemes
 
-vim.cmd.colorscheme "tokyonight-moon"
+-- vim.cmd.colorscheme "tokyonight-moon"
+vim.cmd.colorscheme "catppuccin"
 -- vim.cmd.colorscheme "catppuccin-mocha"
 -- vim.cmd.colorscheme "catppuccin-frappe"
 -- vim.cmd.colorscheme "catppuccin-frappe"
 -- vim.cmd.colorscheme "onedark"
+--
+
+vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
+
+
