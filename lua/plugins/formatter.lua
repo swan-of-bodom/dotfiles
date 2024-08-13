@@ -40,7 +40,7 @@ return {
 				javascript = {
 					function()
 						return {
-							exe = "prettier",
+							exe = "npx prettier",
 							cwd = vim.fn.getcwd(),
 							args = {
 								"--stdin-filepath",
@@ -54,7 +54,7 @@ return {
 				typescript = {
 					function()
 						return {
-							exe = "prettier",
+							exe = "npx prettier",
 							cwd = vim.fn.getcwd(),
 							args = {
 								"--stdin-filepath",
