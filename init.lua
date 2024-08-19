@@ -219,13 +219,12 @@ vim.api.nvim_set_keymap("n", "<leader>t", ":NvimTreeToggle<CR>", { noremap = tru
 
 -- Colorschemes
 
--- vim.cmd.colorscheme "tokyonight-moon"
+-- vim.cmd.colorscheme("tokyonight-moon")
 vim.cmd.colorscheme("catppuccin")
--- vim.cmd.colorscheme "catppuccin-mocha"
--- vim.cmd.colorscheme "catppuccin-frappe"
--- vim.cmd.colorscheme "catppuccin-frappe"
--- vim.cmd.colorscheme "onedark"
---
+-- vim.cmd.colorscheme("catppuccin-mocha")
+-- vim.cmd.colorscheme("catppuccin-frappe")
+-- vim.cmd.colorscheme("onedark")
+-- vim.cmd.colorscheme("fluoromachine")
 
 vim.api.nvim_set_keymap("n", "<C-y>", ":FormatWrite<CR>", { noremap = true, silent = true })
 
