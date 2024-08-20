@@ -123,7 +123,6 @@ require('nvim-treesitter.configs').setup {
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
-
 luasnip.config.setup {}
 
 cmp.setup {
@@ -218,17 +217,10 @@ vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, sile
 --- Toggle Tree
 vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
--- Colorschemes
-
--- vim.cmd.colorscheme("tokyonight-moon")
--- vim.cmd.colorscheme 'catppuccin'
-vim.cmd.colorscheme("catppuccin-mocha")
--- vim.cmd.colorscheme("catppuccin-frappe")
--- vim.cmd.colorscheme("onedark")
--- vim.cmd.colorscheme("fluoromachine")
-
+-- Formatter.nvim
 vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
 
+--- Toggle hover diagnostics
 vim.api.nvim_set_keymap(
   'n',
   '<C-i>',
@@ -236,28 +228,11 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = 'Diagnostics: hover' }
 )
 
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { 'lua', 'ruby', 'javascript', 'typescript', 'rust', 'gleam' },
-  auto_install = false,
-  highlight = {
-    disable = { 'vimdoc' },
-    enable = true,
-  },
-  --hidesig = {
-  --  enable = true,
-  --  opacity = 0.5,
-  --  delay = 200,
-  --},
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-      },
-    },
-  },
-}
+-- Colorschemes
+
+-- vim.cmd.colorscheme("tokyonight-moon")
+-- vim.cmd.colorscheme 'catppuccin'
+vim.cmd.colorscheme 'catppuccin-mocha'
+-- vim.cmd.colorscheme("catppuccin-frappe")
+-- vim.cmd.colorscheme("onedark")
+-- vim.cmd.colorscheme("fluoromachine")
