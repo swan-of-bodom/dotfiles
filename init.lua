@@ -235,3 +235,29 @@ vim.api.nvim_set_keymap(
 	"<cmd>lua vim.lsp.buf.hover()<CR>",
 	{ noremap = true, silent = true, desc = "Diagnostics: hover" }
 )
+
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "lua", "ruby", "javascript", "typescript", "rust", "gleam" },
+	auto_install = false,
+	highlight = {
+		disable = { "vimdoc" },
+		enable = true,
+	},
+	--hidesig = {
+	--  enable = true,
+	--  opacity = 0.5,
+	--  delay = 200,
+	--},
+	textobjects = {
+		select = {
+			enable = true,
+			lookahead = true,
+			keymaps = {
+				["af"] = "@function.outer",
+				["if"] = "@function.inner",
+				["ac"] = "@class.outer",
+				["ic"] = "@class.inner",
+			},
+		},
+	},
+})
