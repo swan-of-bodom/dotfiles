@@ -6,7 +6,7 @@ return {
   opts = { files = { previewer = "max-perf" } },
   keys = {
     { "<leader>f", ":FzfLua files<cr>",   desc = "Find files" },
-    { "<leader>b", ":FzfLua buffers<cr>", desc = "Find buffers" },
+    { "<C-b>", ":FzfLua buffers<cr>", desc = "Find buffers" },
     { "<leader>g", ":FzfLua grep<cr>",    desc = "Grep" },
   },
   config = function()

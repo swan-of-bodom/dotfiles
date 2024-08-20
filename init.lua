@@ -64,9 +64,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 local mason_lspconfig = require("mason-lspconfig")
 
-mason_lspconfig.setup({
-	ensure_installed = vim.tbl_keys(servers),
-})
+mason_lspconfig.setup({ ensure_installed = vim.tbl_keys(servers) })
 
 mason_lspconfig.setup_handlers({
 	function(server_name)
@@ -78,8 +76,11 @@ mason_lspconfig.setup_handlers({
 	end,
 })
 
+-- Gleam shouldnt be installed with Mason, https://github.com/mason-org/mason-registry/pull/3872
+require("lspconfig").gleam.setup({})
+
 -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
-vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level("debug")
 
 -- Diagnostics
 vim.diagnostic.config({
@@ -92,7 +93,7 @@ vim.diagnostic.config({
 -- Treesitter
 
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "lua", "ruby", "javascript", "typescript", "rust" },
+	ensure_installed = { "lua", "ruby", "javascript", "typescript", "rust", "gleam" },
 	auto_install = false,
 	highlight = {
 		disable = { "vimdoc" },
