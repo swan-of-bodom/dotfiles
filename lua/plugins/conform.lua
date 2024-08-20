@@ -5,8 +5,8 @@ return {
   config = function()
     require('dashboard').setup {
       formatters_by_ft = {
-        ruby = { "rubocop" },
+        ruby = { 'rubocop' },
       },
     }
-  end
+  end,
 }
