@@ -17,9 +17,7 @@ return {
           require('formatter.filetypes.any').remove_trailing_whitespace,
         },
         lua = {
-          require('formatter.filetypes.lua').stylua,
-
-          function()
+          require('formatter.filetypes.lua').stylua, function()
             if util.get_current_buffer_file_name() == 'special.lua' then
               return nil
             end
@@ -40,11 +38,11 @@ return {
         javascript = {
           function()
             return {
-              exe = 'prettier',
+              exe = 'npx prettier',
               cwd = vim.fn.getcwd(),
               args = {
                 '--stdin-filepath',
-                util.get_current_buffer_file_path(),
+                util.escape_path(util.get_current_buffer_file_path()),
                 '--write',
               },
               stdin = true,
@@ -54,11 +52,39 @@ return {
         typescript = {
           function()
             return {
-              exe = 'prettier',
+              exe = 'npx prettier',
               cwd = vim.fn.getcwd(),
               args = {
                 '--stdin-filepath',
-                util.get_current_buffer_file_path(),
+                util.escape_path(util.get_current_buffer_file_path()),
+                '--write',
+              },
+              stdin = true,
+            }
+          end,
+        },
+        typescriptreact = {
+          function()
+            return {
+              exe = 'npx prettier',
+              cwd = vim.fn.getcwd(),
+              args = {
+                '--stdin-filepath',
+                util.escape_path(util.get_current_buffer_file_path()),
+                '--write',
+              },
+              stdin = true,
+            }
+          end,
+        },
+        javascriptreact = {
+          function()
+            return {
+              exe = 'npx prettier',
+              cwd = vim.fn.getcwd(),
+              args = {
+                '--stdin-filepath',
+                util.escape_path(util.get_current_buffer_file_path()),
                 '--write',
               },
               stdin = true,
