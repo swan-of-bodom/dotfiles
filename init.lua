@@ -10,7 +10,7 @@ vim.opt.termguicolors = true -- Enable true colors for supported terminals
 vim.opt.cursorline = true -- Highlight the screen line of the cursor
 vim.opt.hlsearch = true -- Highlight all search matches
 vim.opt.incsearch = true -- Do incremental searching
-vim.opt.smartindent = false -- Automatically insert indentation in some cases
+vim.opt.smartindent = true -- Automatically insert indentation in some cases
 vim.opt.ttyfast = true -- Use fast terminal scrolling
 vim.opt.wildmode = 'list:full' -- Completion mode: list all matches
 vim.opt.updatetime = 200 -- reduce updatetime
@@ -220,14 +220,6 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = tru
 -- Formatter.nvim
 vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
 
---- Toggle hover diagnostics
-vim.api.nvim_set_keymap(
-  'n',
-  '<C-i>',
-  '<cmd>lua vim.lsp.buf.hover()<CR>',
-  { noremap = true, silent = true, desc = 'Diagnostics: hover' }
-)
-
 -- Colorschemes
 
 -- vim.cmd.colorscheme("tokyonight-moon")
@@ -236,3 +228,15 @@ vim.cmd.colorscheme 'catppuccin-mocha'
 -- vim.cmd.colorscheme("catppuccin-frappe")
 -- vim.cmd.colorscheme("onedark")
 -- vim.cmd.colorscheme("fluoromachine")
+
+
+-- Move to hover window
+vim.keymap.set('n', 'K', function()
+  local api = vim.api
+  local hover_win = vim.b.hover_preview
+  if hover_win and api.nvim_win_is_valid(hover_win) then
+    api.nvim_set_current_win(hover_win)
+  else
+    require('hover').hover()
+  end
+end, { desc = 'hover.nvim' })
