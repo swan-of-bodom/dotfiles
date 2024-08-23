@@ -173,7 +173,7 @@ vim.defer_fn(function()
       },
     },
   }
-end, 0)
+end, 200)
 
 -- Autocommands
 
@@ -214,6 +214,8 @@ vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, sile
 
 --- Toggle Tree
 vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+--- Neogit
+vim.api.nvim_set_keymap('n', '<leader>g', ':Neogit<CR>', { noremap = true, silent = true })
 
 -- Formatter.nvim
 vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
