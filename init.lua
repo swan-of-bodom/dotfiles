@@ -92,90 +92,88 @@ vim.diagnostic.config {
 
 -- Treesitter
 
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { 'lua', 'ruby', 'javascript', 'typescript', 'rust', 'gleam' },
-  auto_install = false,
-  highlight = {
-    disable = { 'vimdoc' },
-    enable = true,
-  },
-  --hidesig = {
-  --  enable = true,
-  --  opacity = 0.5,
-  --  delay = 200,
-  --},
-  textobjects = {
-    select = {
+vim.defer_fn(function()
+  require('nvim-treesitter.configs').setup {
+    ensure_installed = { 'lua', 'ruby', 'javascript', 'typescript', 'rust', 'gleam', 'cairo' },
+    auto_install = false,
+    highlight = {
+      disable = { 'vimdoc' },
       enable = true,
-      lookahead = true,
-      keymaps = {
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          ['af'] = '@function.outer',
+          ['if'] = '@function.inner',
+          ['ac'] = '@class.outer',
+          ['ic'] = '@class.inner',
+        },
       },
     },
-  },
-}
+  }
+end, 0)
 
 -- Autocomplete
 
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-luasnip.config.setup {}
-
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+vim.defer_fn(function()
+  local cmp = require 'cmp'
+  local luasnip = require 'luasnip'
+  luasnip.config.setup {}
+  cmp.setup {
+    snippet = {
+      expand = function(args)
+        luasnip.lsp_expand(args.body)
+      end,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-  window = {
-    completion = {
-      border = 'rounded',
-      winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
-      side_padding = 1,
-      max_width = 80,
-      max_height = 10,
+    mapping = cmp.mapping.preset.insert {
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete {},
+      ['<CR>'] = cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+      },
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { 'i', 's' }),
     },
-    documentation = {
-      border = 'rounded',
-      winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
+    sources = {
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' },
     },
-  },
-}
+    window = {
+      completion = {
+        border = 'rounded',
+        winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
+        side_padding = 1,
+        max_width = 80,
+        max_height = 10,
+      },
+      documentation = {
+        border = 'rounded',
+        winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
+      },
+    },
+  }
+end, 0)
 
 -- Autocommands
 
@@ -220,15 +218,6 @@ vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = tru
 -- Formatter.nvim
 vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
 
--- Colorschemes
-
--- vim.cmd.colorscheme("tokyonight-moon")
--- vim.cmd.colorscheme 'catppuccin'
-vim.cmd.colorscheme 'catppuccin-mocha'
--- vim.cmd.colorscheme("catppuccin-frappe")
--- vim.cmd.colorscheme("onedark")
--- vim.cmd.colorscheme("fluoromachine")
-
 
 -- Move to hover window
 vim.keymap.set('n', 'K', function()
@@ -240,3 +229,12 @@ vim.keymap.set('n', 'K', function()
     require('hover').hover()
   end
 end, { desc = 'hover.nvim' })
+
+-- Colorschemes
+
+-- vim.cmd.colorscheme("tokyonight-moon")
+-- vim.cmd.colorscheme 'catppuccin'
+vim.cmd.colorscheme 'catppuccin-mocha'
+-- vim.cmd.colorscheme("catppuccin-frappe")
+-- vim.cmd.colorscheme("onedark")
+
