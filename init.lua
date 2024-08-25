@@ -18,18 +18,20 @@ vim.opt.cmdheight = 1 -- Command line height
 vim.opt.autoindent = true -- Indent: Copy indent from current line when starting new line
 vim.opt.swapfile = false -- No swap file
 vim.o.signcolumn = 'yes' -- Stop the signal column from resizing
-
--- For nvim-tree
-vim.g.loaded_netrw = 1
+vim.g.loaded_netrw = 1 -- For nvim tree
 vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
--- TODO: Fix the registry thing from whichkey
-vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+-- Colorschemes
+
+vim.cmd.colorscheme 'tokyonight-moon'
+-- vim.cmd.colorscheme 'catppuccin-mocha'
+-- vim.cmd.colorscheme 'catppuccin'
+-- vim.cmd.colorscheme("catppuccin-frappe")
+-- vim.cmd.colorscheme("onedark")
 
 -- Plugin Manager: lazy.nvim
-
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -45,12 +47,13 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 vim.opt.rtp:prepend(lazypath)
-
 require('lazy').setup 'plugins'
 
 -- LSP
 
 local servers = {
+  eslint = {},
+  tsserver = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -63,9 +66,7 @@ local servers = {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 local mason_lspconfig = require 'mason-lspconfig'
-
 mason_lspconfig.setup { ensure_installed = vim.tbl_keys(servers) }
-
 mason_lspconfig.setup_handlers {
   function(server_name)
     require('lspconfig')[server_name].setup {
@@ -80,7 +81,7 @@ mason_lspconfig.setup_handlers {
 require('lspconfig').gleam.setup {}
 
 -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
--- vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level 'debug'
 
 -- Diagnostics
 vim.diagnostic.config {
@@ -121,6 +122,7 @@ end, 0)
 vim.defer_fn(function()
   local cmp = require 'cmp'
   local luasnip = require 'luasnip'
+  require('luasnip.loaders.from_vscode').lazy_load()
   luasnip.config.setup {}
   cmp.setup {
     snippet = {
@@ -173,7 +175,7 @@ vim.defer_fn(function()
       },
     },
   }
-end, 200)
+end, 10)
 
 -- Autocommands
 
@@ -186,7 +188,13 @@ vim.api.nvim_create_autocmd('VimEnter', {
         vim.cmd 'resize 8'
         vim.cmd 'wincmd p'
       end
-    end, 100)
+    end, 20)
+  end,
+})
+
+vim.api.nvim_create_autocmd('QuitPre', {
+  callback = function()
+    vim.cmd 'cclose'
   end,
 })
 
@@ -197,32 +205,28 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
   end,
 })
 
+-- Exclude quickfix list from buffer list
+-- https://stackoverflow.com/questions/28613190/exclude-quickfix-buffer-from-bnext-bprevious
+local qf_group = vim.api.nvim_create_augroup('qf', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  group = qf_group,
+  pattern = 'qf',
+  command = 'set nobuflisted',
+})
+
 -- Keymaps
 
 -- Go to previous or next diagnostic
-vim.keymap.set('n', '<C-k>', function()
+vim.api.nvim_set_keymap('n', '<C-k>', function()
   vim.diagnostic.goto_prev { float = false }
 end, { desc = 'Diagnostics: prev' })
-
-vim.keymap.set('n', '<C-j>', function()
+vim.api.nvim_set_keymap('n', '<C-j>', function()
   vim.diagnostic.goto_next { float = false }
 end, { desc = 'Diagnostics: next' })
 
--- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
-vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
---- Toggle Tree
-vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
---- Neogit
-vim.api.nvim_set_keymap('n', '<leader>g', ':Neogit<CR>', { noremap = true, silent = true })
-
--- Formatter.nvim
-vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
-
 
 -- Move to hover window
-vim.keymap.set('n', 'K', function()
+vim.api.nvim_set_keymap('n', 'K', function()
   local api = vim.api
   local hover_win = vim.b.hover_preview
   if hover_win and api.nvim_win_is_valid(hover_win) then
@@ -232,11 +236,16 @@ vim.keymap.set('n', 'K', function()
   end
 end, { desc = 'hover.nvim' })
 
--- Colorschemes
-
--- vim.cmd.colorscheme("tokyonight-moon")
--- vim.cmd.colorscheme 'catppuccin'
-vim.cmd.colorscheme 'catppuccin-mocha'
--- vim.cmd.colorscheme("catppuccin-frappe")
--- vim.cmd.colorscheme("onedark")
-
+-- Amazing!
+-- https://stackoverflow.com/questions/4465095/how-to-delete-a-buffer-in-vim-without-losing-the-split-window
+vim.api.nvim_set_keymap('n', '<C-x>', ':bp<Bar>bd #<CR>', { noremap = true, silent = true })
+-- Moving lines (https://vim.fandom.com/wiki/Moving_lines_up_or_down)
+vim.api.nvim_set_keymap('v', '<A-j>', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<A-k>', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>g', ':Neogit<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-y>', ':FormatWrite<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-l>', ':Twilight<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', ',,', ':bprevious<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '..', ':bnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
