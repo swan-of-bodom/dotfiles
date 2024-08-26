@@ -12,8 +12,11 @@ return {
         },
       },
       options = {
-        buffer_close_icon = '',
-        separator_style = 'slant',
+        buffer_close_icon = '',
+        modified_icon = '●',
+        close_icon = '',
+        tab_size = 20,
+        -- separator_style = 'slant',
         diagnostics = false,
         hover = {
           enabled = true,
@@ -22,13 +25,11 @@ return {
         },
         indicator = {
           icon = '▎', -- You can use any character you prefer
-          style = 'icon',
         },
         max_name_length = 50,
         numbers = function(opts)
           return string.format('%s', opts.raise(opts.ordinal))
         end,
-        modified_icon = '',
         offsets = {
           {
             filetype = 'NvimTree',

@@ -23,13 +23,9 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
--- Colorschemes
-
-vim.cmd.colorscheme 'tokyonight-moon'
--- vim.cmd.colorscheme 'catppuccin-mocha'
--- vim.cmd.colorscheme 'catppuccin'
--- vim.cmd.colorscheme("catppuccin-frappe")
--- vim.cmd.colorscheme("onedark")
+-- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
+-- Enable only when debugging
+vim.lsp.set_log_level 'debug'
 
 -- Plugin Manager: lazy.nvim
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -49,40 +45,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 require('lazy').setup 'plugins'
 
--- LSP
-
-local servers = {
-  eslint = {},
-  tsserver = {},
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      diagnostics = { globals = { 'vim' } },
-    },
-  },
-}
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-local mason_lspconfig = require 'mason-lspconfig'
-mason_lspconfig.setup { ensure_installed = vim.tbl_keys(servers) }
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-    }
-  end,
-}
-
--- Gleam shouldnt be installed with Mason, https://github.com/mason-org/mason-registry/pull/3872
-require('lspconfig').gleam.setup {}
-
--- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
--- vim.lsp.set_log_level 'debug'
-
 -- Diagnostics
 vim.diagnostic.config {
   virtual_text = true,
@@ -90,92 +52,6 @@ vim.diagnostic.config {
   underline = true,
   --update_in_insert = true,
 }
-
--- Treesitter
-
-vim.defer_fn(function()
-  require('nvim-treesitter.configs').setup {
-    ensure_installed = { 'lua', 'ruby', 'javascript', 'typescript', 'rust', 'gleam', 'cairo' },
-    auto_install = false,
-    highlight = {
-      disable = { 'vimdoc' },
-      enable = true,
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
-      },
-    },
-  }
-end, 0)
-
--- Autocomplete
-
--- nvim-cmp setup
-vim.defer_fn(function()
-  local cmp = require 'cmp'
-  local luasnip = require 'luasnip'
-  require('luasnip.loaders.from_vscode').lazy_load()
-  luasnip.config.setup {}
-  cmp.setup {
-    snippet = {
-      expand = function(args)
-        luasnip.lsp_expand(args.body)
-      end,
-    },
-    mapping = cmp.mapping.preset.insert {
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete {},
-      ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      },
-      ['<Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-        elseif luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
-        else
-          fallback()
-        end
-      end, { 'i', 's' }),
-      ['<S-Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        elseif luasnip.jumpable(-1) then
-          luasnip.jump(-1)
-        else
-          fallback()
-        end
-      end, { 'i', 's' }),
-    },
-    sources = {
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-    },
-    window = {
-      completion = {
-        border = 'rounded',
-        winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
-        side_padding = 1,
-        max_width = 80,
-        max_height = 10,
-      },
-      documentation = {
-        border = 'rounded',
-        winhighlight = 'Normal:Normal,CursorLine:CursorLine,Search:Search',
-      },
-    },
-  }
-end, 10)
 
 -- Autocommands
 
@@ -217,16 +93,16 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Keymaps
 
 -- Go to previous or next diagnostic
-vim.api.nvim_set_keymap('n', '<C-k>', function()
+vim.keymap.set('n', '<C-k>', function()
   vim.diagnostic.goto_prev { float = false }
 end, { desc = 'Diagnostics: prev' })
-vim.api.nvim_set_keymap('n', '<C-j>', function()
+
+vim.keymap.set('n', '<C-j>', function()
   vim.diagnostic.goto_next { float = false }
 end, { desc = 'Diagnostics: next' })
 
-
 -- Move to hover window
-vim.api.nvim_set_keymap('n', 'K', function()
+vim.keymap.set('n', 'K', function()
   local api = vim.api
   local hover_win = vim.b.hover_preview
   if hover_win and api.nvim_win_is_valid(hover_win) then
@@ -249,3 +125,11 @@ vim.api.nvim_set_keymap('n', '<C-l>', ':Twilight<CR>', { noremap = true, silent 
 vim.api.nvim_set_keymap('n', ',,', ':bprevious<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '..', ':bnext<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+
+-- Colorschemes
+
+vim.cmd.colorscheme 'tokyonight-moon'
+-- vim.cmd.colorscheme 'catppuccin-mocha'
+-- vim.cmd.colorscheme 'catppuccin'
+-- vim.cmd.colorscheme("catppuccin-frappe")
+-- vim.cmd.colorscheme("onedark")
