@@ -53,6 +53,9 @@ vim.diagnostic.config {
   --update_in_insert = true,
 }
 
+vim.fn.sign_define('DiagnosticSignError', { text = '■', texthl = 'DiagnosticSignError' })
+vim.fn.sign_define('DiagnosticSignWarn', { text = '■', texthl = 'DiagnosticSignWarn' })
+
 -- Autocommands
 
 -- Open qfix on vim enter
@@ -64,7 +67,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
         vim.cmd 'resize 8'
         vim.cmd 'wincmd p'
       end
-    end, 20)
+    end, 100)
   end,
 })
 
@@ -128,8 +131,14 @@ vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
 
 -- Colorschemes
 
-vim.cmd.colorscheme 'tokyonight-moon'
 -- vim.cmd.colorscheme 'catppuccin-mocha'
--- vim.cmd.colorscheme 'catppuccin'
--- vim.cmd.colorscheme("catppuccin-frappe")
--- vim.cmd.colorscheme("onedark")
+vim.cmd.colorscheme 'tokyonight-moon'
+-- vim.cmd.colorscheme 'catppuccin-macchiato'
+-- vim.cmd.colorscheme 'catppuccin-frappe'
+-- vim.cmd.colorscheme 'onedark'
+-- vim.cmd.colorscheme 'gruvbox'
+
+-- Load all colorschemes except active one after few secds
+vim.defer_fn(function()
+    vim.api.nvim_exec_autocmds("User", { pattern = "LoadSchemes" })
+end, 3000)

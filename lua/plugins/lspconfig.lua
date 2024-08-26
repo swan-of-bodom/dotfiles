@@ -7,10 +7,6 @@ return {
   },
   config = function()
     local servers = {
-      eslint = {},
-      tsserver = {},
-      cairo_ls = {},
-      html = {},
       lua_ls = {
         Lua = {
           workspace = { checkThirdParty = false },

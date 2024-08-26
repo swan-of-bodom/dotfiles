@@ -1,6 +1,7 @@
 return {
   'folke/tokyonight.nvim',
-  lazy = false,
-  priority = 1000,
-  opts = {},
+  lazy = true,  -- Load the plugin lazily
+  event = "User LoadSchemes",
+  opts = {},  -- Additional options for the plugin
 }
+

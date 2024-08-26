@@ -1,4 +1,6 @@
 return {
   'olimorris/onedarkpro.nvim',
-  priority = 1000,
+  lazy = true,  -- Load the plugin lazily
+  event = "User LoadSchemes",
+  opts = {},  -- Additional options for the plugin
 }
