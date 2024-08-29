@@ -15,8 +15,7 @@ return {
         buffer_close_icon = '',
         modified_icon = '●',
         close_icon = '',
-        tab_size = 20,
-        -- separator_style = 'slant',
+        separator_style = 'slant',
         diagnostics = false,
         hover = {
           enabled = true,

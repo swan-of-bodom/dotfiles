@@ -25,7 +25,7 @@ vim.g.maplocalleader = '\\'
 
 -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
 -- Enable only when debugging
-vim.lsp.set_log_level 'debug'
+-- vim.lsp.set_log_level 'debug'
 
 -- Plugin Manager: lazy.nvim
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -131,8 +131,10 @@ vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
 
 -- Colorschemes
 
--- vim.cmd.colorscheme 'catppuccin-mocha'
-vim.cmd.colorscheme 'tokyonight-moon'
+-- vim.cmd.colorscheme 'tokyonight-storm'
+-- vim.cmd.colorscheme 'tokyonight-moon'
+-- vim.cmd.colorscheme 'tokyonight-night'
+vim.cmd.colorscheme 'catppuccin-mocha'
 -- vim.cmd.colorscheme 'catppuccin-macchiato'
 -- vim.cmd.colorscheme 'catppuccin-frappe'
 -- vim.cmd.colorscheme 'onedark'
@@ -140,5 +142,6 @@ vim.cmd.colorscheme 'tokyonight-moon'
 
 -- Load all colorschemes except active one after few secds
 vim.defer_fn(function()
-    vim.api.nvim_exec_autocmds("User", { pattern = "LoadSchemes" })
+  vim.api.nvim_exec_autocmds('User', { pattern = 'LoadSchemes' })
 end, 3000)
+

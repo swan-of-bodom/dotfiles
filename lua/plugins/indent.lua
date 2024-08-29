@@ -5,7 +5,7 @@ return {
   ---@module "ibl"
   config = function()
     require('ibl').setup {
-      scope = { enabled = false },
+      scope = { enabled = true, show_start = false },
       exclude = {
         filetypes = {
           'dashboard',
