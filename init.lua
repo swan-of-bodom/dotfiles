@@ -1,5 +1,6 @@
 -- Vim Options
 
+--
 vim.opt.ts = 2 -- Number of spaces in <Tab>
 vim.opt.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.opt.softtabstop = 2 -- Number of spaces a <Tab> counts for
@@ -24,6 +25,7 @@ vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
 -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
+-- --
 -- Enable only when debugging
 -- vim.lsp.set_log_level 'debug'
 
@@ -55,27 +57,6 @@ vim.diagnostic.config {
 
 vim.fn.sign_define('DiagnosticSignError', { text = '■', texthl = 'DiagnosticSignError' })
 vim.fn.sign_define('DiagnosticSignWarn', { text = '■', texthl = 'DiagnosticSignWarn' })
-
--- Autocommands
-
--- Open qfix on vim enter
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    vim.defer_fn(function()
-      if vim.bo.filetype ~= 'dashboard' then
-        vim.cmd 'copen'
-        vim.cmd 'resize 8'
-        vim.cmd 'wincmd p'
-      end
-    end, 100)
-  end,
-})
-
-vim.api.nvim_create_autocmd('QuitPre', {
-  callback = function()
-    vim.cmd 'cclose'
-  end,
-})
 
 -- Populate quickfix on change
 vim.api.nvim_create_autocmd('DiagnosticChanged', {
@@ -134,14 +115,13 @@ vim.api.nvim_set_keymap('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
 -- vim.cmd.colorscheme 'tokyonight-storm'
 -- vim.cmd.colorscheme 'tokyonight-moon'
 -- vim.cmd.colorscheme 'tokyonight-night'
-vim.cmd.colorscheme 'catppuccin-mocha'
 -- vim.cmd.colorscheme 'catppuccin-macchiato'
 -- vim.cmd.colorscheme 'catppuccin-frappe'
 -- vim.cmd.colorscheme 'onedark'
 -- vim.cmd.colorscheme 'gruvbox'
+vim.cmd.colorscheme 'catppuccin-mocha'
 
 -- Load all colorschemes except active one after few secds
 vim.defer_fn(function()
   vim.api.nvim_exec_autocmds('User', { pattern = 'LoadSchemes' })
 end, 3000)
-

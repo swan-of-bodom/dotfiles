@@ -3,19 +3,21 @@ return {
   version = '*',
   dependencies = 'nvim-tree/nvim-web-devicons',
   config = function()
+    local mocha = require('catppuccin.palettes').get_palette 'mocha'
     require('bufferline').setup {
-      highlights = {
-        buffer_selected = {
-          bold = true,
-          italic = true,
-          underline = false,
+      highlights = require('catppuccin.groups.integrations.bufferline').get {
+        custom = {
+          all = {
+            separator = { fg = mocha.crust },
+            separator_visible = { fg = mocha.crust },
+            separator_selected = { fg = mocha.crust },
+          },
         },
       },
       options = {
         buffer_close_icon = '',
         modified_icon = '●',
         close_icon = '',
-        separator_style = 'slant',
         diagnostics = false,
         hover = {
           enabled = true,
@@ -41,6 +43,12 @@ return {
         show_tab_indicators = true,
       },
     }
+    vim.cmd [[
+      augroup MyColors
+      autocmd!
+      autocmd ColorScheme * highlight BufferLineFill guibg=#e1e2e
+      augroup END
+    ]]
     -- Add this part for buffer switching with leader + number
     for i = 1, 9 do
       vim.api.nvim_set_keymap(
