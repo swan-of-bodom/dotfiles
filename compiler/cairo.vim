@@ -1,1 +1,0 @@
-compiler "scarb build"
