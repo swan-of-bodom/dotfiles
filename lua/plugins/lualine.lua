@@ -135,16 +135,40 @@ return {
       separator = { left = '', right = '' },
     }
 
-    local branch = {
-      'branch',
-      separator = { left = '', right = '' },
-      color = { fg = colors.base, bg = colors.green },
-    }
-
     local dia = {
       'diagnostics',
       color = { bg = colors.surface0 },
       separator = { left = '', right = '' },
+    }
+
+    local git_repo = {
+      function()
+        local handle = io.popen 'git remote get-url origin 2> /dev/null'
+        if handle == nil then
+          return ''
+        end
+        local result = handle:read '*a'
+        handle:close()
+        if result == '' then
+          return '' -- Not a git repository or no remote named 'origin'
+        end
+        -- Extract repo name from URL
+        local repo_name = result:match '([%w-]+/[%w-]+)%.git'
+        if repo_name then
+          return '  ' .. repo_name
+        else
+          -- Fallback: just return the last part of the path
+          return result:match('([^/]+)%.git'):gsub('\n$', '')
+        end
+      end,
+      color = { fg = colors.text, bg = colors.surface0 },
+      separator = { left = '', right = '' },
+    }
+
+    local branch = {
+      'branch',
+      separator = { left = '', right = '' },
+      color = { fg = colors.base, bg = colors.green },
     }
 
     require('lualine').setup {
@@ -188,6 +212,7 @@ return {
           filename,
           filetype,
           empty,
+          git_repo,
           branch,
           {
             'diff',
@@ -202,11 +227,12 @@ return {
             color = { fg = '#ed8796' },
           },
         },
-        lualine_x = {},
+        lualine_x = {
+        },
         lualine_y = {
           encoding,
           fileformat,
-          empty
+          empty,
         },
         lualine_z = {
           dia,

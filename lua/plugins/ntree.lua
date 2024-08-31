@@ -1,7 +1,7 @@
 return {
   'nvim-tree/nvim-tree.lua',
   version = '*',
-  event = 'BufReadPost',  -- Load when a buffer is read
+  event = 'BufReadPost',
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
@@ -9,6 +9,9 @@ return {
     require('nvim-tree').setup {
       filters = {
         dotfiles = true,
+      },
+      view = {
+        width = 32,
       },
     }
 
@@ -33,6 +36,7 @@ return {
         end
       end,
     })
+
 
     -- Hide tree if only dashboard
     vim.api.nvim_create_autocmd('VimEnter', {

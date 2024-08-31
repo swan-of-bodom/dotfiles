@@ -1,6 +1,6 @@
 return {
 	"goolord/alpha-nvim",
-	event = "VimEnter", -- load plugin after all configuration is set
+	event = "VimEnter",
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 	},
@@ -51,7 +51,7 @@ return {
 		}
 
 		local function footer()
-			return "Chill and code"
+			return "Be free, study and improve"
 		end
 		dashboard.section.footer.val = footer()
 

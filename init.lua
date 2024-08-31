@@ -25,7 +25,6 @@ vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
 -- Sometimes LSPs are lazy or are outdated, creates a log at .local/state/nvim/lsp.log
--- --
 -- Enable only when debugging
 -- vim.lsp.set_log_level 'debug'
 
@@ -52,7 +51,6 @@ vim.diagnostic.config {
   virtual_text = true,
   signs = true,
   underline = true,
-  --update_in_insert = true,
 }
 
 vim.fn.sign_define('DiagnosticSignError', { text = '■', texthl = 'DiagnosticSignError' })
