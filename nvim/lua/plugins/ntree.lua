@@ -1,7 +1,6 @@
 return {
   'nvim-tree/nvim-tree.lua',
   version = '*',
-  event = 'BufReadPost',
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
@@ -36,7 +35,6 @@ return {
         end
       end,
     })
-
 
     -- Hide tree if only dashboard
     vim.api.nvim_create_autocmd('VimEnter', {

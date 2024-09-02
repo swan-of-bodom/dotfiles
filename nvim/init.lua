@@ -123,3 +123,23 @@ vim.cmd.colorscheme 'catppuccin-mocha'
 vim.defer_fn(function()
   vim.api.nvim_exec_autocmds('User', { pattern = 'LoadSchemes' })
 end, 3000)
+
+-- Function to toggle quickfix window
+function toggle_quickfix()
+    local qf_exists = false
+    for _, win in pairs(vim.fn.getwininfo()) do
+        if win.quickfix == 1 then
+            qf_exists = true
+        end
+    end
+    if qf_exists == true then
+        vim.cmd "cclose"
+    else
+        vim.cmd "copen"
+        vim.cmd "resize 7"
+        vim.cmd 'wincmd p'
+    end
+end
+
+-- Map <C-h> to toggle quickfix
+vim.api.nvim_set_keymap('n', '<C-h>', ':lua toggle_quickfix()<CR>', { noremap = true, silent = true })
