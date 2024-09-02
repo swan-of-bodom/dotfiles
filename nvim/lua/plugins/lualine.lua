@@ -161,14 +161,14 @@ return {
           return result:match('([^/]+)%.git'):gsub('\n$', '')
         end
       end,
-      color = { fg = colors.base, bg = colors.green },
+      color = { fg = colors.text, bg = colors.surface0 },
       separator = { left = '', right = '' },
     }
 
     local branch = {
       'branch',
       separator = { left = '', right = '' },
-      color = { fg = colors.text, bg = colors.surface0 },
+      color = { fg = colors.base, bg = colors.green },
     }
 
     require('lualine').setup {

@@ -12,11 +12,6 @@ return {
 		dashboard.section.header.val = {
 			[[                                                                       ]],
 			[[                                                                       ]],
-			[[                                                                       ]],
-			[[                                                                       ]],
-			[[                                                                       ]],
-			[[                                                                       ]],
-			[[                                                                       ]],
 			[[                                                                     ]],
 			[[       ████ ██████           █████      ██                     ]],
 			[[      ███████████             █████                             ]],
@@ -51,7 +46,7 @@ return {
 		}
 
 		local function footer()
-			return "Be free, study and improve"
+			return "Open the gates..."
 		end
 		dashboard.section.footer.val = footer()
 
