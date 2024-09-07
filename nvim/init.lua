@@ -145,12 +145,5 @@ end
 vim.api.nvim_set_keymap('n', '<C-h>', ':lua toggle_quickfix()<CR>', { noremap = true, silent = true })
 
  vim.cmd("highlight Normal guibg=none")
- vim.cmd("highlight NonText guibg=none")  -- For line numbers and other non-text elements
- vim.cmd("highlight NvimTreeNormal guibg=none")       -- Transparent background for NvimTree window
- -- vim.cmd("highlight NvimTreeVertSplit guibg=none")    -- Transparent vertical split line for NvimTree
- -- vim.cmd("highlight LualineNormal guibg=none")
- -- vim.cmd("highlight LualineInsert guibg=none")
- -- vim.cmd("highlight LualineVisual guibg=none")
- -- vim.cmd("highlight LualineReplace guibg=none")
- -- vim.cmd("highlight LualineCommand guibg=none")
- -- vim.cmd("highlight LualineInactive guibg=none")
+ vim.cmd("highlight NonText guibg=none")
+ vim.cmd("highlight NvimTreeNormal guibg=none")
