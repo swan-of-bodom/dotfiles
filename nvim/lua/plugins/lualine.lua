@@ -90,7 +90,7 @@ return {
       function()
         return ' '
       end,
-      color = { bg = colors.base },
+      color = { bg = "none" },
     }
 
     local filename = {
