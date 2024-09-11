@@ -1,6 +1,6 @@
 return {
   'xiyaowong/transparent.nvim',
-  enabled = false,
+  enabled = true,
   config = function()
     require('transparent').setup {
       groups = {
@@ -40,11 +40,11 @@ return {
       -- Also the user event "TransparentClear" will be triggered
       on_clear = function() end,
     }
-    vim.g.transparent_groups = vim.list_extend(
-      vim.g.transparent_groups or {},
-      vim.tbl_map(function(v)
-        return v.hl_group
-      end, vim.tbl_values(require('bufferline.config').highlights))
-    )
+    -- vim.g.transparent_groups = vim.list_extend(
+    --   vim.g.transparent_groups or {},
+    --   vim.tbl_map(function(v)
+    --     return v.hl_group
+    --   end, vim.tbl_values(require('bufferline.config').highlights))
+    -- )
   end,
 }

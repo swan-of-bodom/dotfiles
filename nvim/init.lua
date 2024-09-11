@@ -144,6 +144,6 @@ end
 -- Map <C-h> to toggle quickfix
 vim.api.nvim_set_keymap('n', '<C-h>', ':lua toggle_quickfix()<CR>', { noremap = true, silent = true })
 
- vim.cmd("highlight Normal guibg=none")
- vim.cmd("highlight NonText guibg=none")
- vim.cmd("highlight NvimTreeNormal guibg=none")
+-- vim.cmd("highlight Normal guibg=none")
+-- vim.cmd("highlight NonText guibg=none")
+-- vim.cmd("highlight NvimTreeNormal guibg=none")
